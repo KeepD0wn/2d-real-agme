@@ -14,7 +14,7 @@ public class heart : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Player")
         {            
-            GameObject.Find("HERO").GetComponent<heroScript>().HealthPoints += 25;            
+            collision.gameObject.GetComponent<heroScript>().HealthPoints += 25;
             Destroy(gameObject);           
         }                         
     }
