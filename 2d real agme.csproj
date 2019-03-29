@@ -228,7 +228,6 @@
   <ItemGroup>
     <Compile Include="Assets\CreateGOD.cs" />
     <Compile Include="Assets\CreateHeart.cs" />
-    <Compile Include="Assets\dingBoss.cs" />
     <Compile Include="Assets\GameMenuController.cs" />
     <Compile Include="Assets\heart.cs" />
     <Compile Include="Assets\heroScript.cs" />

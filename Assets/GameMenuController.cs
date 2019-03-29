@@ -8,20 +8,20 @@ public class GameMenuController : MonoBehaviour {
 
     [SerializeField] GameObject menu;
     [SerializeField] GameObject settings;
-    [SerializeField] Slider soundSlider;
-    [SerializeField] GameObject god;
-    int lvlMenu=0;
-    float soundVolume;
+    [SerializeField] Slider soundSlider;    
+    int lvlMenu=0;    
+    GameObject lastFrame = null;
+    
 
     // Use this for initialization
-    void Start()
+    void Start()    
     {
         if (!PlayerPrefs.HasKey("savedSoundVolume"))  //при первом запуске у него не будет ключа и будет использоваться значение по умолчанию
         {                                                      
-            PlayerPrefs.SetFloat("savedSoundVolume",0.1f); //после 1 запуска эта часть кода никогда не будет выполняться
+            PlayerPrefs.SetFloat("savedSoundVolume",0.1f); //после первого запуска эта часть кода никогда не будет выполняться
         }
        soundSlider.value= PlayerPrefs.GetFloat("savedSoundVolume");  //загружаю значение громкости        
-    }
+    }                                                                //HKEY_CURRENT_USER/SOFTWARE/Unity/UnityEditor/CompanyName/ProjectName
 
     // Update is called once per frame
     void LateUpdate()
@@ -31,21 +31,18 @@ public class GameMenuController : MonoBehaviour {
             if (Time.timeScale == 1)
             {
                 OnPause();
-                lvlMenu++;
-                Debug.Log(lvlMenu.ToString());
+                lvlMenu++;                
             }
             else if (Time.timeScale == 0 && lvlMenu == 1)
             {
                 OnResume();
                 lvlMenu--;
-                Debug.Log(lvlMenu.ToString());
-            } 
+            }
             else if (Time.timeScale == 0 && lvlMenu == 2)
             {
                 menu.SetActive(true);
                 settings.SetActive(false);
                 lvlMenu--;
-                Debug.Log(lvlMenu.ToString());
             }
         }
     }
@@ -65,7 +62,6 @@ public class GameMenuController : MonoBehaviour {
         settings.SetActive(true);
         menu.SetActive(false);
         lvlMenu++;
-        Debug.Log(lvlMenu.ToString());
     }
 
     /// <summary>
@@ -82,7 +78,6 @@ public class GameMenuController : MonoBehaviour {
         menu.SetActive(true);
         settings.SetActive(false);
         lvlMenu--;
-        Debug.Log(lvlMenu.ToString());
     }
 
     public void OnPause()
@@ -94,6 +89,8 @@ public class GameMenuController : MonoBehaviour {
     public void OnResume()
     {
         menu.SetActive(false);
+        settings.SetActive(false);
         Time.timeScale = 1;
     }
+    
 }
