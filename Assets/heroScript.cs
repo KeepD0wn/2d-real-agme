@@ -8,10 +8,12 @@ using UnityEngine.Events;
 public class heroScript : MonoBehaviour
 {
     Rigidbody2D hero;
-    Animator anim;
-    public UnityEvent OnEat;
+    Animator anim;   
     int doubleJump=0;    
     static int healthPoints=100;
+    public static bool watchRight=true;
+    AudioSource audio;
+    [SerializeField] GameObject bullet;
 
     public static heroScript instance = null;
     bool canJump=true;
@@ -25,6 +27,8 @@ public class heroScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        audio = GetComponent<AudioSource>();
+
         if (instance == null)
         {
             instance = this;
@@ -83,10 +87,10 @@ public class heroScript : MonoBehaviour
         {
             Flip();
             anim.SetInteger("beg", 2);             //анимация бега
-        }
+        }        
 
-        hero.velocity = new Vector2(Input.GetAxis("Horizontal") * 10f, hero.velocity.y);
-
+         hero.velocity = new Vector2(Input.GetAxis("Horizontal") * 5f, hero.velocity.y);
+       
         // hero.MovePosition(new Vector2(Input.GetAxis("Horizontal") * 3f, hero.velocity.y));
         // Vector2 move = new Vector2(Input.GetAxis("Horizontal") * 10f, hero.position.y) * Time.deltaTime;
         // hero.MovePosition(hero.position+move);
@@ -100,7 +104,7 @@ public class heroScript : MonoBehaviour
         }
         set
         {
-            if (value >= 100) value = 100;
+            if (value > 100) value = 100;
             if (value <= 0)
             {
                 value = 0;
@@ -127,11 +131,8 @@ public class heroScript : MonoBehaviour
         }
 
         if (collision.gameObject.tag == "life")
-        {
-            if (OnEat != null)
-            {
-                OnEat.Invoke();
-            }
+        {           
+            audio.Play();
         }
     }
 
@@ -150,15 +151,28 @@ public class heroScript : MonoBehaviour
     
     private void OnGUI()                   // интерфейс HP
     {
-        GUI.Box(new Rect(0,0,100,30), "Life = " + HealthPoints);
-    }     
+       GUIStyle style = new GUIStyle();
+        style.fontSize = 38;        
+        GUI.Box(new Rect(0,0,300,90), "Life = " + HealthPoints,style);
+    }
 
-    void Flip()  // отражения персонажа при развороте
+    /// <summary>
+    /// отражения персонажа при развороте
+    /// </summary>
+    void Flip()  
     {
         if (Input.GetAxis("Horizontal") > 0)
-            transform.localRotation = Quaternion.Euler(0,0,0);
+        {
+            gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            watchRight = true;
+        }
+           
         if (Input.GetAxis("Horizontal") < 0)
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
+        {
+            gameObject.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            watchRight = false;
+        }
+           
     }
 
     void NewHP()
@@ -186,5 +200,7 @@ public class heroScript : MonoBehaviour
                               
            //hero.AddForce(transform.up * 10f, ForceMode2D.Impulse);            
         }        
-    }   
+    }       
+
+    
 }

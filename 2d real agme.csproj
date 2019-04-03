@@ -226,12 +226,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Boss.cs" />
+    <Compile Include="Assets\BulletFlyScr.cs" />
+    <Compile Include="Assets\CameraFollow.cs" />
     <Compile Include="Assets\CreateGOD.cs" />
     <Compile Include="Assets\CreateHeart.cs" />
+    <Compile Include="Assets\FollowHero.cs" />
     <Compile Include="Assets\GameMenuController.cs" />
+    <Compile Include="Assets\GunController.cs" />
     <Compile Include="Assets\heart.cs" />
     <Compile Include="Assets\heroScript.cs" />
     <Compile Include="Assets\Menu.cs" />
+    <Compile Include="Assets\TakeWeapon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

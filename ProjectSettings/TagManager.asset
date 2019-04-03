@@ -9,6 +9,7 @@ TagManager:
   - enemy
   - RespCol
   - GOD
+  - Bullet
   layers:
   - Default
   - TransparentFX
