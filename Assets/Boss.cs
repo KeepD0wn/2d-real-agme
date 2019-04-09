@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour {
 
-    int healthPoints=100;
+    int healthPoints=100;    
     [SerializeField] GameObject canvasSlider;
     [SerializeField] Slider slider;
 
@@ -39,7 +39,7 @@ public class Boss : MonoBehaviour {
         if (HealthPoints<=0)
         {
             Destroy(gameObject);
-            OffSlider();
+            OffSlider(); 
         }
 	}
 
@@ -50,7 +50,7 @@ public class Boss : MonoBehaviour {
             healthPoints -= 5;            
         }
     }
-
+       
     void OffSlider()
     {
         canvasSlider.SetActive(false);

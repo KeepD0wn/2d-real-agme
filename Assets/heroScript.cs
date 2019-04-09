@@ -8,15 +8,16 @@ using UnityEngine.Events;
 public class heroScript : MonoBehaviour
 {
     Rigidbody2D hero;
-    Animator anim;   
-    int doubleJump=0;    
+    Animator anim;       
+    Vector2 moveVector;
+    float moveSpeed = 4f;
     static int healthPoints=100;
     public static bool watchRight=true;
     AudioSource audio;
     [SerializeField] GameObject bullet;
 
     public static heroScript instance = null;
-    bool canJump=true;
+    bool grounded=true;
     float ratio = (float)Screen.height / Screen.width; // коэф отношения экрана выс/шир  
     
     private void Awake()
@@ -24,6 +25,17 @@ public class heroScript : MonoBehaviour
         
     }
 
+    void Move()
+    {
+        moveVector = Vector2.zero;
+        moveVector.x = Input.GetAxis("Horizontal")*moveSpeed;
+        moveVector.y = 0;
+
+        hero.MovePosition(hero.position + moveVector * Time.fixedDeltaTime);
+        
+    }
+
+    
     // Use this for initialization
     void Start()
     {
@@ -43,7 +55,7 @@ public class heroScript : MonoBehaviour
 
         // тут определяем зону видимости в зависимости от разрешения экрана
         float f = 1920 * ratio;
-        float ortSize = f / 200f;
+        float ortSize = f / 150f;
         Camera.main.orthographicSize = ortSize;
                 
         hero = GetComponent<Rigidbody2D>();
@@ -51,12 +63,9 @@ public class heroScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }    
+       
 
-    private void LateUpdate()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -87,13 +96,13 @@ public class heroScript : MonoBehaviour
         {
             Flip();
             anim.SetInteger("beg", 2);             //анимация бега
-        }        
+        }
 
-         hero.velocity = new Vector2(Input.GetAxis("Horizontal") * 5f, hero.velocity.y);
-       
-        // hero.MovePosition(new Vector2(Input.GetAxis("Horizontal") * 3f, hero.velocity.y));
-        // Vector2 move = new Vector2(Input.GetAxis("Horizontal") * 10f, hero.position.y) * Time.deltaTime;
-        // hero.MovePosition(hero.position+move);
+        if (grounded == true)
+        {
+            hero.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, hero.velocity.y);
+           // Move();
+        }        
     }
 
     public int HealthPoints
@@ -124,9 +133,10 @@ public class heroScript : MonoBehaviour
                 SceneManager.LoadScene("2d");
         }
 
+
         if (collision.gameObject.tag == "land")
         {
-            canJump = true;            
+            grounded = true;
             Debug.Log("is grounded");
         }
 
@@ -141,14 +151,27 @@ public class heroScript : MonoBehaviour
         if (collision.gameObject.tag == "enemy")
         {
             HealthPoints -= 25;
-        }       
-    }    
-    
+        }        
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "land")
+        {
+            grounded = true;
+            Debug.Log("is grounded");
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.tag == "land")
+        {
+            grounded = false;
+            Debug.Log("is ungrounded");
+        }
     }
-    
+
     private void OnGUI()                   // интерфейс HP
     {
        GUIStyle style = new GUIStyle();
@@ -188,17 +211,11 @@ public class heroScript : MonoBehaviour
 
     void Jump()
     {
-        if (canJump == true)
+        if (grounded == true)
         {
-            doubleJump++;
-            hero.velocity = new Vector2(hero.velocity.x, 7f);
-            if (doubleJump == 2)
-            {
-                canJump = false;
-                doubleJump = 0;
-            }          
-                              
-           //hero.AddForce(transform.up * 10f, ForceMode2D.Impulse);            
+           hero.velocity = new Vector2(hero.velocity.x,9f);            
+           grounded = false;
+            //hero.AddForce(transform.up * 10f, ForceMode2D.Impulse);            
         }        
     }       
 

@@ -4,16 +4,26 @@ using UnityEngine;
 
 public class GunController : MonoBehaviour {
 
-    public float cooldown, currentCooldown;
+    public float cooldown = 0.2f;
+    float currentCooldown;
+    Vector2 dire;
+    
     [SerializeField] GameObject bullet;
 
 	// Use this for initialization
 	void Start () {
         
-	}
+    }
 	
+    
+
 	// Update is called once per frame
 	void LateUpdate () {
+
+       
+       
+      
+
         if (Input.GetMouseButton(0) && CanShoot()==true)
         {
             Shoot();

@@ -5,8 +5,10 @@ using UnityEngine;
 public class BulletFlyScr : MonoBehaviour {
 
     float speed = 10f;
-    Vector2 dir;    
-
+    Vector3 dir;
+    Vector3 dir2;
+    Vector3 mou;
+    
     private void Awake()
     {       
         CheckHeroAxis();
@@ -19,12 +21,14 @@ public class BulletFlyScr : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        mou = Input.mousePosition;
         Move();
 	}
 
     void Move()
-    {           
-        gameObject.transform.Translate(dir*Time.deltaTime);
+    {
+        gameObject.transform.Translate(transform.right*speed* Time.deltaTime);
+        
     }
 
     /// <summary>
@@ -37,7 +41,7 @@ public class BulletFlyScr : MonoBehaviour {
         if (heroScript.watchRight == true)
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
-            dir = new Vector2(speed, 0);
+            dir = new Vector2(speed, 0);    
         }
         else
         {
